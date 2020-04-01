@@ -15,7 +15,7 @@ export default function NewIncident(){
                 <p>Descreva o caso detalhadamente para encontar um herói para resolver isso.</p>
                 <Link className="back-link" to="/profile">
                     <FiArrowLeft size={16} color="#E02041"/>
-                    Voltar para home
+                    Voltar para perfil
                 </Link>
             </section>
             <form>
