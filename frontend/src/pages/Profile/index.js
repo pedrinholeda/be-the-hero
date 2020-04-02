@@ -1,5 +1,5 @@
 import React, {useEffect, useState } from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import { FiPower, FiTrash2} from 'react-icons/fi'
 
 import logoImg from '../../assets/logo.svg'
@@ -8,6 +8,8 @@ import api from "../../services/api"
 import "./styles.css"
 
 export default function Profile(){
+    const history = useHistory()
+
     const ongId = localStorage.getItem("ongId")
     const ongName = localStorage.getItem("ongName")
 
@@ -30,10 +32,17 @@ export default function Profile(){
                     Authorization: ongId,
                 }
             })
+
+            setIncidents(incidents.filter(incident => incident.id !== id ))
+
         } catch (error) {
             alert("Erro ao deletar caso")
         }
+    }
 
+    function handleLogout(){
+        localStorage.clear()
+        history.push("/")
     }
 
     return(
@@ -42,7 +51,7 @@ export default function Profile(){
                 <img src={logoImg} alt="Be The Hero"/>
                 <span>Bem vinda, {ongName}</span>
                 <Link className="button" to="/incidents/new">Cadastrar novo caso</Link>
-                <button type="button">
+                <button onClick={handleLogout} type="button">
                     <FiPower  size={18} color="#E02041"/>
                 </button>
             </header>
