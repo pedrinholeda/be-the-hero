@@ -1,5 +1,6 @@
 import React from 'react'
 import {Feather} from "@expo/vector-icons"
+import{ } from "react-navigation/native"
 import {View, FlatList,TouchableOpacity, Image, Text} from "react-native"
 
 import logoImg from "../../assets/logo.png"
@@ -21,6 +22,8 @@ export default function Incidents(){
             <FlatList
                 data={[1,2,3,4,5]}
                 style={styles.incidentList}
+                keyExtractor={incident =>  String(incident)}
+                showsVerticalScrollIndicator={false}
                 renderItem={() => (
                     <View style={styles.incidentList}>
                 <View style={styles.incident}>
