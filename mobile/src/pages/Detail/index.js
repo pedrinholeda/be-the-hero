@@ -1,7 +1,7 @@
 import React from 'react'
 import { Feather } from "@expo/vector-icons"
-import { useNavigation } from "@react-navigation/native"
-import { View, Text, Image, TouchableOpacity,Linking } from "react-native"
+import { useNavigation, useRoute } from "@react-navigation/native"
+import { View, Text, Image, TouchableOpacity, Linking } from "react-native"
 import * as MailCompose from "expo-mail-composer"
 
 import styles from "./styles"
@@ -9,23 +9,28 @@ import logoImg from "../../assets/logo.png"
 
 export default function Detail() {
     const navigation = useNavigation();
-    const menssage = 'Ola APAD, Estou entrando em contato pois gostaria de ajudar no caso "Tratamento de doguinho" com o valor de R$ 120,00 '
+    const route = useRoute();
 
-    function navigateBack(){
+    const incident = route.params.incident
+
+    //BUG NO ENVIO POR EMAIL - CORRIGIR
+    const menssage = `Ola ${incident.name}, Estou entrando em contato pois gostaria de ajudar no caso "${incident.title}" com o valor de ${Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(incident.value)} `
+
+    function navigateBack() {
         navigation.goBack()
     }
 
-    function sendMail(){
+    function sendMail() {
         MailCompose.composeAsync({
-            subject:'Heroi do caso: Tratamento de doguinho',
-            recipients:['ph_leda@hotmail.com'],
+            subject: `Heroi do caso: ${incident.title}`,
+            recipients: ["email@email.com"],
             body: menssage,
         })
 
     }
 
-    function sendWhatsapp(){
-        Linking.openURL(`https://api.whatsapp.com/send?phone=5561985638530&text=${menssage}`)
+    function sendWhatsapp() {
+        Linking.openURL(`https://api.whatsapp.com/send?phone=${incident.whatsapp}&text=${menssage}`)
     }
     return (
         <View style={styles.container}>
@@ -36,14 +41,15 @@ export default function Detail() {
                 </TouchableOpacity>
             </View>
             <View style={styles.incident}>
-                <Text style={[styles.incidentProperty,{marginTop:0}]}>ONG:</Text>
-                <Text style={styles.incidentValue}>APAD</Text>
+                <Text style={[styles.incidentProperty, { marginTop: 0 }]}>ONG:</Text>
+                <Text style={styles.incidentValue}>{incident.name} de {incident.city}/{incident.uf} </Text>
 
                 <Text style={styles.incidentProperty}>CASO:</Text>
-                <Text style={styles.incidentValue}>Tratamento de doguinho</Text>
+                <Text style={styles.incidentValue}>{incident.title}</Text>
 
                 <Text style={styles.incidentProperty}>VALOR:</Text>
-                <Text style={styles.incidentValue}>R$ 120,00</Text>
+                <Text style={styles.incidentValue}>{Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(incident.value)}</Text>
+
             </View>
             <View style={styles.contactBox}>
                 <Text style={styles.heroTitle}>Salve o dia! </Text>
